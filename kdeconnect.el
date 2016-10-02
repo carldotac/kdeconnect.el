@@ -4,7 +4,7 @@
 
 ;; Author: Carl Lieberman
 ;; Keywords: kdeconnect, android
-;; Version: 0.2.0
+;; Version: 0.2.1
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -37,9 +37,6 @@
 (defvar command
   "The action to execute via KDE Connect")
 
-(defvar file
-  "Absolute path to send")
-
 ;;;###autoload
 (defun kdeconnect-get-device ()
   "Display ID of active device"
@@ -57,28 +54,42 @@
 (defun kdeconnect-ping ()
   "Ping the active device"
   (interactive)
-  (setq command (mapconcat 'identity (list base "-d" kdeconnect-device "--ping") " "))
+  (setq command
+        (mapconcat 'identity (list base "-d" kdeconnect-device "--ping") " "))
+  (shell-command command))
+
+;;;###autoload
+(defun kdeconnect-ping-msg (message)
+  "Ping the active device with a custom message"
+  (interactive "MEnter message: ")
+  (setq message (concat "\"" message "\""))
+  (setq command
+        (mapconcat
+         'identity (list base "-d" kdeconnect-device "--ping-msg" message) " "))
   (shell-command command))
 
 ;;;###autoload
 (defun kdeconnect-ring ()
   "Ring the active device"
   (interactive)
-  (setq command (mapconcat 'identity (list base "-d" kdeconnect-device "--ring") " "))
+  (setq command
+        (mapconcat 'identity (list base "-d" kdeconnect-device "--ring") " "))
   (shell-command command))
 
 ;;;###autoload
 (defun kdeconnect-send-file (path)
   "Send a file to the active device"
   (interactive "fSelect file: ")
-  (setq file path)
-  (setq command (mapconcat 'identity (list base "-d" kdeconnect-device "--share" file) " "))
+  (setq command
+        (mapconcat
+         'identity(list base "-d" kdeconnect-device "--share" path) " "))
   (shell-command command))
 
 (defun kdeconnect-select-device ()
   "Choose the active device from all available ones"
   (interactive)
-  (setq devices (shell-command-to-string "kdeconnect-cli -l --id-only"))
+  (setq command (mapconcat 'identity (list base "-a" "--id-only") " "))
+  (setq devices (shell-command-to-string command))
   (if (string= "" devices)
       (error "No devices found"))
   (setq devices (split-string devices "\n" t))
