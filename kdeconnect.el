@@ -4,7 +4,7 @@
 
 ;; Author: Carl Lieberman
 ;; Keywords: kdeconnect, android
-;; Version: 0.1.0
+;; Version: 0.2.0
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -41,7 +41,14 @@
   "Absolute path to send")
 
 ;;;###autoload
+(defun kdeconnect-get-device ()
+  "Display ID of active device"
+  (interactive)
+  (message kdeconnect-device))
+
+;;;###autoload
 (defun kdeconnect-list-devices ()
+  "Display all available devices"
   (interactive)
   (setq command (mapconcat 'identity (list base "-l") " "))
   (shell-command command))
@@ -67,6 +74,20 @@
   (setq file path)
   (setq command (mapconcat 'identity (list base "-d" kdeconnect-device "--share" file) " "))
   (shell-command command))
+
+(defun kdeconnect-select-device ()
+  "Choose the active device from all available ones"
+  (interactive)
+  (setq devices (shell-command-to-string "kdeconnect-cli -l --id-only"))
+  (if (string= "" devices)
+      (error "No devices found"))
+  (setq devices (split-string devices "\n" t))
+  (setq device
+        (completing-read
+         "Select a device: "
+         devices
+         nil t ""))
+  (setq kdeconnect-device device))
 
 (provide 'kdeconnect)
 ;;; kdeconnect.el ends here
