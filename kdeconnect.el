@@ -28,13 +28,13 @@
 
 ;;; Code:
 
-(defvar base "kdeconnect-cli"
+(defvar kdeconnect-base "kdeconnect-cli"
   "The root of all KDE Connect commands")
 
 (defvar kdeconnect-device
   "The ID of the active device")
 
-(defvar command
+(defvar kdeconnect-kdeconnect-command
   "The action to execute via KDE Connect")
 
 ;;;###autoload
@@ -47,49 +47,54 @@
 (defun kdeconnect-list-devices ()
   "Display all available devices"
   (interactive)
-  (setq command (mapconcat 'identity (list base "-l") " "))
-  (shell-command command))
+  (setq kdeconnect-command
+        (mapconcat 'identity (list kdeconnect-base "-l") " "))
+  (shell-command kdeconnect-command))
 
 ;;;###autoload
 (defun kdeconnect-ping ()
   "Ping the active device"
   (interactive)
-  (setq command
-        (mapconcat 'identity (list base "-d" kdeconnect-device "--ping") " "))
-  (shell-command command))
+  (setq kdeconnect-command
+        (mapconcat 'identity
+                   (list kdeconnect-base "-d" kdeconnect-device "--ping") " "))
+  (shell-command kdeconnect-command))
 
 ;;;###autoload
 (defun kdeconnect-ping-msg (message)
   "Ping the active device with a custom message"
   (interactive "MEnter message: ")
   (setq message (concat "\"" message "\""))
-  (setq command
-        (mapconcat
-         'identity (list base "-d" kdeconnect-device "--ping-msg" message) " "))
-  (shell-command command))
+  (setq kdeconnect-command
+        (mapconcat 'identity
+                   (list kdeconnect-base "-d" kdeconnect-device "--ping-msg"
+                         message) " "))
+  (shell-command kdeconnect-command))
 
 ;;;###autoload
 (defun kdeconnect-ring ()
   "Ring the active device"
   (interactive)
-  (setq command
-        (mapconcat 'identity (list base "-d" kdeconnect-device "--ring") " "))
-  (shell-command command))
+  (setq kdeconnect-command
+        (mapconcat 'identity
+                   (list kdeconnect-base "-d" kdeconnect-device "--ring") " "))
+  (shell-command kdeconnect-command))
 
 ;;;###autoload
 (defun kdeconnect-send-file (path)
   "Send a file to the active device"
   (interactive "fSelect file: ")
-  (setq command
-        (mapconcat
-         'identity(list base "-d" kdeconnect-device "--share" path) " "))
-  (shell-command command))
+  (setq kdeconnect-command
+        (mapconcat 'identity
+         (list kdeconnect-base "-d" kdeconnect-device "--share" path) " "))
+  (shell-command kdeconnect-command))
 
 (defun kdeconnect-select-device ()
   "Choose the active device from all available ones"
   (interactive)
-  (setq command (mapconcat 'identity (list base "-a" "--id-only") " "))
-  (setq devices (shell-command-to-string command))
+  (setq kdeconnect-command
+        (mapconcat 'identity (list kdeconnect-base "-a" "--id-only") " "))
+  (setq devices (shell-command-to-string kdeconnect-command))
   (if (string= "" devices)
       (error "No devices found"))
   (setq devices (split-string devices "\n" t))
