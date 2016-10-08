@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2016 Carl Lieberman
 
-;; Author: Carl Lieberman
+;; Author: Carl Lieberman <dev@carl.ac>
 ;; Keywords: kdeconnect, android
 ;; Version: 0.2.2
 
