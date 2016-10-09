@@ -4,7 +4,7 @@
 
 ;; Author: Carl Lieberman <dev@carl.ac>
 ;; Keywords: kdeconnect, android
-;; Version: 0.2.3
+;; Version: 0.2.4
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -28,14 +28,8 @@
 
 ;;; Code:
 
-(defvar kdeconnect-base "kdeconnect-cli"
-  "The root of all KDE Connect commands")
-
 (defvar kdeconnect-device nil
-  "The ID of the active device")
-
-(defvar kdeconnect-command nil
-  "The action to execute via KDE Connect")
+  "The ID of the active device for KDE Connect")
 
 ;;;###autoload
 (defun kdeconnect-get-device ()
@@ -47,63 +41,58 @@
 (defun kdeconnect-list-devices ()
   "Display all available devices"
   (interactive)
-  (setq kdeconnect-command
-        (mapconcat 'identity (list kdeconnect-base "-l") " "))
-  (shell-command kdeconnect-command))
+  (shell-command
+   (mapconcat 'identity (list "kdeconnect-cli" "-l") " ")))
 
 ;;;###autoload
 (defun kdeconnect-ping ()
   "Ping the active device"
   (interactive)
-  (setq kdeconnect-command
-        (mapconcat 'identity
-                   (list kdeconnect-base "-d" kdeconnect-device "--ping") " "))
-  (shell-command kdeconnect-command))
+  (shell-command
+   (mapconcat 'identity
+              (list "kdeconnect-cli" "-d" kdeconnect-device "--ping") " ")))
+
 
 ;;;###autoload
 (defun kdeconnect-ping-msg (message)
   "Ping the active device with a custom message"
   (interactive "MEnter message: ")
   (setq message (concat "\"" message "\""))
-  (setq kdeconnect-command
-        (mapconcat 'identity
-                   (list kdeconnect-base "-d" kdeconnect-device "--ping-msg"
-                         message) " "))
-  (shell-command kdeconnect-command))
+  (shell-command
+   (mapconcat 'identity
+              (list "kdeconnect-cli" "-d" kdeconnect-device "--ping-msg" message) " ")))
 
 ;;;###autoload
 (defun kdeconnect-ring ()
   "Ring the active device"
   (interactive)
-  (setq kdeconnect-command
-        (mapconcat 'identity
-                   (list kdeconnect-base "-d" kdeconnect-device "--ring") " "))
-  (shell-command kdeconnect-command))
+  (shell-command
+   (mapconcat 'identity
+              (list "kdeconnect-cli" "-d" kdeconnect-device "--ring") " ")))
 
 ;;;###autoload
 (defun kdeconnect-send-file (path)
   "Send a file to the active device"
   (interactive "fSelect file: ")
-  (setq kdeconnect-command
-        (mapconcat 'identity
-         (list kdeconnect-base "-d" kdeconnect-device "--share" path) " "))
-  (shell-command kdeconnect-command))
+  (shell-command
+   (mapconcat 'identity
+              (list "kdeconnect-cli" "-d" kdeconnect-device "--share" path)
+              " ")))
 
 (defun kdeconnect-select-device ()
   "Choose the active device from all available ones"
   (interactive)
-  (setq kdeconnect-command
-        (mapconcat 'identity (list kdeconnect-base "-a" "--id-only") " "))
-  (setq devices (shell-command-to-string kdeconnect-command))
-  (if (string= "" devices)
+  (setq kdeconnect-device
+        (shell-command-to-string
+         (mapconcat 'identity (list "kdeconnect-cli" "-a" "--id-only") " ")))
+  (if (string= "" kdeconnect-device)
       (error "No devices found"))
-  (setq devices (split-string devices "\n" t))
-  (setq device
+  (setq kdeconnect-device (split-string kdeconnect-device "\n" t))
+  (setq kdeconnect-device
         (completing-read
          "Select a device: "
-         devices
-         nil t ""))
-  (setq kdeconnect-device device))
+         kdeconnect-device
+         nil t "")))
 
 (provide 'kdeconnect)
 ;;; kdeconnect.el ends here
