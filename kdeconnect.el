@@ -4,7 +4,7 @@
 
 ;; Author: Carl Lieberman <dev@carl.ac>
 ;; Keywords: kdeconnect, android
-;; Version: 0.2.2
+;; Version: 0.2.3
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -31,10 +31,10 @@
 (defvar kdeconnect-base "kdeconnect-cli"
   "The root of all KDE Connect commands")
 
-(defvar kdeconnect-device
+(defvar kdeconnect-device nil
   "The ID of the active device")
 
-(defvar kdeconnect-command
+(defvar kdeconnect-command nil
   "The action to execute via KDE Connect")
 
 ;;;###autoload
