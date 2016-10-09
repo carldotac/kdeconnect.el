@@ -1,4 +1,4 @@
-;;; kdeconnect.el --- An Emacs interface for KDE Connect
+;;; kdeconnect.el --- An interface for KDE Connect
 
 ;; Copyright (C) 2016 Carl Lieberman
 
@@ -23,40 +23,40 @@
 
 ;; This package provides several helper functions to use the
 ;; excellent KDE Connect program without leaving the comfort of
-;; Emacs. It requires KDE Connect on both your computer and phone.
-;; It has only been tested on GNU/Linux.
+;; Emacs.  It requires KDE Connect on both your computer and phone.
+;; KDE Connect currently requires GNU/Linux on the desktop.
 
 ;;; Code:
 
 (defvar kdeconnect-device nil
-  "The ID of the active device for KDE Connect")
+  "The ID of the active device for KDE Connect.")
 
 ;;;###autoload
 (defun kdeconnect-get-device ()
-  "Display ID of active device"
+  "Display the ID of the active device."
   (interactive)
   (message kdeconnect-device))
 
 ;;;###autoload
 (defun kdeconnect-list-devices ()
-  "Display all available devices"
+  "Display all available devices."
   (interactive)
   (shell-command
    (mapconcat 'identity (list "kdeconnect-cli" "-l") " ")))
 
 ;;;###autoload
 (defun kdeconnect-ping ()
-  "Ping the active device"
+  "Ping the active device."
   (interactive)
   (shell-command
    (mapconcat 'identity
               (list "kdeconnect-cli" "-d" kdeconnect-device "--ping") " ")))
 
-
 ;;;###autoload
 (defun kdeconnect-ping-msg (message)
-  "Ping the active device with a custom message"
+  "Ping the active device with MESSAGE."
   (interactive "MEnter message: ")
+  ;; Wrap MESSAGE in quotation marks to pass to shell
   (setq message (concat "\"" message "\""))
   (shell-command
    (mapconcat 'identity
@@ -64,7 +64,7 @@
 
 ;;;###autoload
 (defun kdeconnect-ring ()
-  "Ring the active device"
+  "Ring the active device."
   (interactive)
   (shell-command
    (mapconcat 'identity
@@ -72,7 +72,7 @@
 
 ;;;###autoload
 (defun kdeconnect-send-file (path)
-  "Send a file to the active device"
+  "Send the file at PATH to the active device."
   (interactive "fSelect file: ")
   (shell-command
    (mapconcat 'identity
@@ -80,7 +80,7 @@
               " ")))
 
 (defun kdeconnect-select-device ()
-  "Choose the active device from all available ones"
+  "Choose the active device from all available ones."
   (interactive)
   (setq kdeconnect-device
         (shell-command-to-string
