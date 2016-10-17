@@ -1,0 +1,25 @@
+* Setup
+After installation, you can set a default device by adding
+#+BEGIN_SRC emacs-lisp
+(setq kdeconnect-device "<device ID>")
+#+END_SRC
+to your =init.el= file.
+Device IDs for available devices can be found by calling =M-x kdeconnect-list-devices=.
+If you do not want a default device, you can set the active device for your session with =M-x kdeconnect-select-device.=
+This function works even if you already set a default device.
+
+* Usage
+After selecting an active device, the following functions are available.
+| Function                 | Description                                                                                                                                               |
+|--------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| kdeconnect-get-device    | Display the active device                                                                                                                                 |
+| kdeconnect-list-devices  | Display all available devices                                                                                                                             |
+| kdeconnect-ping          | Send a notification to the active device                                                                                                                  |
+| kdeconnect-ping-msg      | Send a notification with a custom message to the active device                                                                                            |
+| kdeconnect-ring          | Make the active device ring (useful for finding it)                                                                                                       |
+| kdeconnect-select-device | Select the active device from all available ones (you should call =kdeconnect-list-devices= first if you don't already know the ID of the desired device) |
+| kdeconnect-send-file     | Send the selected file to the active device                                                                                                               |
+
+* Troubleshooting
+If you're not seeing any response from your desired device, make sure there is an active connection.
+You can use =M-x kdeconnect-list-devices= or open up KDE Connect to make sure.
