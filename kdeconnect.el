@@ -21,15 +21,17 @@
 
 ;;; Commentary:
 
-;; This package provides several helper functions to use the
-;; excellent KDE Connect program without leaving the comfort of
-;; Emacs.  It requires KDE Connect on both your computer and phone.
-;; KDE Connect currently requires GNU/Linux on the desktop.
+;; This package provides helper functions to use the command line
+;; version of KDE Connect, a bridge between Android devices and
+;; computers, without leaving the comfort of Emacs.  It requires KDE
+;; Connect on your computer(s) and Android device(s).  KDE Connect
+;; currently requires Linux on the desktop, but does not require
+;; KDE.
 
 ;;; Code:
 
 (defvar kdeconnect-device nil
-  "The ID of the active device for KDE Connect.")
+  "The ID of the active device.")
 
 ;;;###autoload
 (defun kdeconnect-get-device ()
