@@ -4,7 +4,7 @@
 
 ;; Author: Carl Lieberman <dev@carl.ac>
 ;; Keywords: kdeconnect, android
-;; Version: 1.0.0
+;; Version: 1.0.1
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -76,6 +76,7 @@
 (defun kdeconnect-send-file (path)
   "Send the file at PATH to the active device."
   (interactive "fSelect file: ")
+  (setq path (concat "\"" path "\""))
   (shell-command
    (mapconcat 'identity
               (list "kdeconnect-cli" "-d" kdeconnect-device "--share" path)
