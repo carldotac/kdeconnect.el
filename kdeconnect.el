@@ -81,7 +81,7 @@
               (list "kdeconnect-cli" "-d" kdeconnect-device "--share" path)
               " ")))
 
-;;:###autoload
+;;;###autoload
 (defun kdeconnect-select-device ()
   "Choose the active device from all available ones."
   (interactive)
