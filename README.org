@@ -21,20 +21,20 @@ If you want, you can also set a default device by adding
 (setq kdeconnect-active-device "<device ID>")
 #+END_SRC
 to your =init.el= file.
-If you do not want a default device, you can set the active device for your session with =M-x kdeconnect-select-device.=
+If you do not want a default device, you can set the active device for your session with =M-x kdeconnect-select-active-device.=
 This function works even if you already set a default device.
 
 * Usage
 After selecting an active device, the following functions are available.
-| Function                     | Description                                                    |
-|------------------------------+----------------------------------------------------------------|
-| kdeconnect-get-active-device | Display the active device                                      |
-| kdeconnect-list-devices      | Display all visible devices, even unavailable ones             |
-| kdeconnect-ping              | Send a notification to the active device                       |
-| kdeconnect-ping-msg          | Send a notification with a custom message to the active device |
-| kdeconnect-ring              | Make the active device ring (useful for finding it)            |
-| kdeconnect-select-device     | Select the active device from =kdeconnect-devices=             |
-| kdeconnect-send-file         | Send the selected file to the active device                    |
+| Function                        | Description                                                    |
+|---------------------------------+----------------------------------------------------------------|
+| kdeconnect-get-active-device    | Display the active device                                      |
+| kdeconnect-list-devices         | Display all visible devices, even unavailable ones             |
+| kdeconnect-ping                 | Send a notification to the active device                       |
+| kdeconnect-ping-msg             | Send a notification with a custom message to the active device |
+| kdeconnect-ring                 | Make the active device ring (useful for finding it)            |
+| kdeconnect-select-active-device | Select the active device from =kdeconnect-devices=             |
+| kdeconnect-send-file            | Send the selected file to the active device                    |
 
 * Troubleshooting
 If you're not seeing any response from your desired device, make sure there is an active connection.
