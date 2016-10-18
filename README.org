@@ -10,9 +10,15 @@ It does /not/ require KDE.
 Pair your devices from these applications.
 
 Install the Emacs package and add =(require 'kdeconnect)= to your =init.el= file.
-After installation, you can set a default device by adding
+You will need to  the IDs of any devices you wish to use.
+If you don't already know these, call =M-x kdeconnect-list-devices= and check your =*Messages*= buffer.
+Set =kdeconnect-devices= in your =init.el= to be the IDs of your device(s) separated by commas, like so:
 #+BEGIN_SRC emacs-lisp
-(setq kdeconnect-device "<device ID>")
+(setq kdeconnect-devices "ef72819a8db1e193,ff172817910b1bc5,_2cd7dfcd_7260_22dd_6658_9aa2760b8275_")
+#+END_SRC
+If you want, you can also set a default device by adding
+#+BEGIN_SRC emacs-lisp
+(setq kdeconnect-active-device "<device ID>")
 #+END_SRC
 to your =init.el= file.
 Device IDs for available devices can be found by calling =M-x kdeconnect-list-devices=.
@@ -21,15 +27,15 @@ This function works even if you already set a default device.
 
 * Usage
 After selecting an active device, the following functions are available.
-| Function                 | Description                                                                                                                                               |
-|--------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------|
-| kdeconnect-get-active-device | Display the active device                                                                                                                                 |
-| kdeconnect-list-devices  | Display all available devices                                                                                                                             |
-| kdeconnect-ping          | Send a notification to the active device                                                                                                                  |
-| kdeconnect-ping-msg      | Send a notification with a custom message to the active device                                                                                            |
-| kdeconnect-ring          | Make the active device ring (useful for finding it)                                                                                                       |
-| kdeconnect-select-device | Select the active device from all available ones (you should call =kdeconnect-list-devices= first if you don't already know the ID of the desired device) |
-| kdeconnect-send-file     | Send the selected file to the active device                                                                                                               |
+| Function                     | Description                                                    |
+|------------------------------+----------------------------------------------------------------|
+| kdeconnect-get-active-device | Display the active device                                      |
+| kdeconnect-list-devices      | Display all visible devices, even unavailable ones             |
+| kdeconnect-ping              | Send a notification to the active device                       |
+| kdeconnect-ping-msg          | Send a notification with a custom message to the active device |
+| kdeconnect-ring              | Make the active device ring (useful for finding it)            |
+| kdeconnect-select-device     | Select the active device from =kdeconnect-devices=             |
+| kdeconnect-send-file         | Send the selected file to the active device                    |
 
 * Troubleshooting
 If you're not seeing any response from your desired device, make sure there is an active connection.

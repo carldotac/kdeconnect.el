@@ -4,7 +4,7 @@
 
 ;; Author: Carl Lieberman <dev@carl.ac>
 ;; Keywords: kdeconnect, android
-;; Version: 1.0.1
+;; Version: 1.1.0
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -30,18 +30,21 @@
 
 ;;; Code:
 
-(defvar kdeconnect-device nil
+(defvar kdeconnect-active-device nil
   "The ID of the active device.")
+
+(defvar kdeconnect-devices nil
+  "The IDs of your available devices.")
 
 ;;;###autoload
 (defun kdeconnect-get-active-device ()
   "Display the ID of the active device."
   (interactive)
-  (message kdeconnect-device))
+  (message kdeconnect-active-device))
 
 ;;;###autoload
 (defun kdeconnect-list-devices ()
-  "Display all available devices."
+  "Display all visible devices, even unavailable ones."
   (interactive)
   (shell-command "kdeconnect-cli -l"))
 
@@ -51,7 +54,8 @@
   (interactive)
   (shell-command
    (mapconcat 'identity
-              (list "kdeconnect-cli" "-d" kdeconnect-device "--ping") " ")))
+              (list "kdeconnect-cli" "-d"
+                    kdeconnect-active-device "--ping") " ")))
 
 ;;;###autoload
 (defun kdeconnect-ping-msg (message)
@@ -61,7 +65,7 @@
   (setq message (concat "\"" message "\""))
   (shell-command
    (mapconcat 'identity
-              (list "kdeconnect-cli" "-d" kdeconnect-device
+              (list "kdeconnect-cli" "-d" kdeconnect-active-device
                     "--ping-msg" message) " ")))
 
 ;;;###autoload
@@ -70,7 +74,8 @@
   (interactive)
   (shell-command
    (mapconcat 'identity
-              (list "kdeconnect-cli" "-d" kdeconnect-device "--ring") " ")))
+              (list "kdeconnect-cli" "-d" kdeconnect-active-device
+                    "--ring") " ")))
 
 ;;;###autoload
 (defun kdeconnect-send-file (path)
@@ -79,23 +84,17 @@
   (setq path (concat "\"" path "\""))
   (shell-command
    (mapconcat 'identity
-              (list "kdeconnect-cli" "-d" kdeconnect-device "--share" path)
-              " ")))
+              (list "kdeconnect-cli" "-d" kdeconnect-active-device
+                    "--share" path) " ")))
 
 ;;;###autoload
-(defun kdeconnect-select-device ()
+(defun kdeconnect-select-active-device ()
   "Choose the active device from all available ones."
   (interactive)
-  (if (string= "No devices found\n"
-               (shell-command-to-string "kdeconnect-cli -a --id-only"))
-      (error "No devices found"))
-  (setq kdeconnect-device
-        (shell-command-to-string "kdeconnect-cli -a --id-only"))
-  (setq kdeconnect-device (split-string kdeconnect-device "\n" t))
-  (setq kdeconnect-device
+  (setq kdeconnect-active-device
         (completing-read
          "Select a device: "
-         kdeconnect-device
+         (split-string kdeconnect-devices "," t)
          nil t "")))
 
 (provide 'kdeconnect)
