@@ -4,7 +4,7 @@
 
 ;; Author: Carl Lieberman <dev@carl.ac>
 ;; Keywords: kdeconnect, android
-;; Version: 0.2.5
+;; Version: 1.0.0
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@
   "The ID of the active device.")
 
 ;;;###autoload
-(defun kdeconnect-get-device ()
+(defun kdeconnect-get-active-device ()
   "Display the ID of the active device."
   (interactive)
   (message kdeconnect-device))

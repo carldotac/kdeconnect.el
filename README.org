@@ -23,7 +23,7 @@ This function works even if you already set a default device.
 After selecting an active device, the following functions are available.
 | Function                 | Description                                                                                                                                               |
 |--------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------|
-| kdeconnect-get-device    | Display the active device                                                                                                                                 |
+| kdeconnect-get-active-device | Display the active device                                                                                                                                 |
 | kdeconnect-list-devices  | Display all available devices                                                                                                                             |
 | kdeconnect-ping          | Send a notification to the active device                                                                                                                  |
 | kdeconnect-ping-msg      | Send a notification with a custom message to the active device                                                                                            |
