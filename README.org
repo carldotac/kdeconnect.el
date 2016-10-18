@@ -21,7 +21,6 @@ If you want, you can also set a default device by adding
 (setq kdeconnect-active-device "<device ID>")
 #+END_SRC
 to your =init.el= file.
-Device IDs for available devices can be found by calling =M-x kdeconnect-list-devices=.
 If you do not want a default device, you can set the active device for your session with =M-x kdeconnect-select-device.=
 This function works even if you already set a default device.
 
