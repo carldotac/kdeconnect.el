@@ -4,7 +4,7 @@
 
 ;; Author: Carl Lieberman <dev@carl.ac>
 ;; Keywords: kdeconnect, android
-;; Version: 0.2.4
+;; Version: 0.2.5
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -43,8 +43,7 @@
 (defun kdeconnect-list-devices ()
   "Display all available devices."
   (interactive)
-  (shell-command
-   (mapconcat 'identity (list "kdeconnect-cli" "-l") " ")))
+  (shell-command "kdeconnect-cli -l"))
 
 ;;;###autoload
 (defun kdeconnect-ping ()
@@ -62,7 +61,8 @@
   (setq message (concat "\"" message "\""))
   (shell-command
    (mapconcat 'identity
-              (list "kdeconnect-cli" "-d" kdeconnect-device "--ping-msg" message) " ")))
+              (list "kdeconnect-cli" "-d" kdeconnect-device
+                    "--ping-msg" message) " ")))
 
 ;;;###autoload
 (defun kdeconnect-ring ()
@@ -84,11 +84,11 @@
 (defun kdeconnect-select-device ()
   "Choose the active device from all available ones."
   (interactive)
-  (setq kdeconnect-device
-        (shell-command-to-string
-         (mapconcat 'identity (list "kdeconnect-cli" "-a" "--id-only") " ")))
-  (if (string= "" kdeconnect-device)
+  (if (string= "No devices found\n"
+               (shell-command-to-string "kdeconnect-cli -a --id-only"))
       (error "No devices found"))
+  (setq kdeconnect-device
+        (shell-command-to-string "kdeconnect-cli -a --id-only"))
   (setq kdeconnect-device (split-string kdeconnect-device "\n" t))
   (setq kdeconnect-device
         (completing-read
