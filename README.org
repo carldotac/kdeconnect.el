@@ -10,7 +10,7 @@ It does /not/ require KDE.
 Pair your devices from these applications.
 
 Install the Emacs package (available in [[https://melpa.org/][MELPA]]) and add =(require 'kdeconnect)= to your =init.el= file.
-You will need to  the IDs of any devices you wish to use.
+You will need to add the IDs of any devices you wish to use.
 If you don't already know these, call =M-x kdeconnect-list-devices= and check your =*Messages*= buffer.
 Set =kdeconnect-devices= in your =init.el= to be the IDs of your device(s) separated by commas, like so:
 #+BEGIN_SRC emacs-lisp
