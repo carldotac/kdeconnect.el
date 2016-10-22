@@ -4,7 +4,7 @@
 
 ;; Author: Carl Lieberman <dev@carl.ac>
 ;; Keywords: kdeconnect, android
-;; Version: 1.1.0
+;; Version: 1.2.0
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -55,18 +55,24 @@
   (shell-command
    (mapconcat 'identity
               (list "kdeconnect-cli" "-d"
-                    kdeconnect-active-device "--ping") " ")))
+                    (shell-quote-argument kdeconnect-active-device)
+                    "--ping") " ")))
 
 ;;;###autoload
 (defun kdeconnect-ping-msg (message)
   "Ping the active device with MESSAGE."
   (interactive "MEnter message: ")
-  ;; Wrap MESSAGE in quotation marks to pass to shell
-  (setq message (concat "\"" message "\""))
   (shell-command
    (mapconcat 'identity
-              (list "kdeconnect-cli" "-d" kdeconnect-active-device
-                    "--ping-msg" message) " ")))
+              (list "kdeconnect-cli" "-d"
+                    (shell-quote-argument kdeconnect-active-device)
+                    "--ping-msg" (shell-quote-argument message)) " ")))
+
+;;;###autoload
+(defun kdeconnect-refresh ()
+  "Refresh connections."
+  (interactive)
+  (shell-command "kdeconnect-cli --refresh"))
 
 ;;;###autoload
 (defun kdeconnect-ring ()
@@ -74,28 +80,29 @@
   (interactive)
   (shell-command
    (mapconcat 'identity
-              (list "kdeconnect-cli" "-d" kdeconnect-active-device
+              (list "kdeconnect-cli" "-d"
+                    (shell-quote-argument kdeconnect-active-device)
                     "--ring") " ")))
 
 ;;;###autoload
 (defun kdeconnect-send-file (path)
   "Send the file at PATH to the active device."
   (interactive "fSelect file: ")
-  (setq path (concat "\"" path "\""))
   (shell-command
    (mapconcat 'identity
-              (list "kdeconnect-cli" "-d" kdeconnect-active-device
-                    "--share" path) " ")))
+              (list "kdeconnect-cli" "-d"
+                    (shell-quote-argument kdeconnect-active-device)
+                    "--share" (shell-quote-argument path)) " ")))
 
 ;;;###autoload
-(defun kdeconnect-select-active-device ()
-  "Choose the active device from all available ones."
-  (interactive)
-  (setq kdeconnect-active-device
-        (completing-read
-         "Select a device: "
-         (split-string kdeconnect-devices "," t)
-         nil t "")))
+(defun kdeconnect-select-active-device (name)
+  "Set the active device to NAME."
+  (interactive
+   (list (completing-read
+          "Select a device: "
+          (split-string kdeconnect-devices "," t)
+          nil t "")))
+  (setq kdeconnect-active-device name))
 
 (provide 'kdeconnect)
 ;;; kdeconnect.el ends here
