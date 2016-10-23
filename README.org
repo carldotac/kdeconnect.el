@@ -16,13 +16,16 @@ Set =kdeconnect-devices= in your =init.el= to be the IDs of your device(s) separ
 #+BEGIN_SRC emacs-lisp
 (setq kdeconnect-devices "ef72819a8db1e193,ff172817910b1bc5,_2cd7dfcd_7260_22dd_6658_9aa2760b8275_")
 #+END_SRC
-If you want, you can also set a default device by adding
+
+Before calling any functions that interact with a specific device, you /must/ set the active device, even if you only have one device ID in =kdeconnect-devices=.
+There are two ways to do this.
+You can set a default device by adding
 #+BEGIN_SRC emacs-lisp
 (setq kdeconnect-active-device "<device ID>")
 #+END_SRC
 to your =init.el= file.
-If you do not want a default device, you can set the active device for your session with =M-x kdeconnect-select-active-device.=
-This function works even if you already set a default device.
+When you load Emacs and call a function like kdeconnect-ping, that device will be the target.
+If you do not set a default or wish to update your active device for the session, call =M-x kdeconnect-select-active-device.=
 
 * Usage
 After selecting an active device, the following functions are available.
