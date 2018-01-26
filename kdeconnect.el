@@ -109,10 +109,10 @@
   (interactive "MEnter message: \nnEnter destination: ")
   (shell-command
    (mapconcat 'identity
-			  (list "kdeconnect-cli" "-d"
-					(shell-quote-argument kdeconnect-active-device)
-					"--destination" (number-to-string destination)
-					"--send-sms" (shell-quote-argument message)) " ")))
+              (list "kdeconnect-cli" "-d"
+                    (shell-quote-argument kdeconnect-active-device)
+                    "--destination" (number-to-string destination)
+                    "--send-sms" (shell-quote-argument message)) " ")))
 
 (provide 'kdeconnect)
 ;;; kdeconnect.el ends here
