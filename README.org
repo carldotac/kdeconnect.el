@@ -39,6 +39,7 @@ After selecting an active device, the following functions are available.
 | kdeconnect-ring                 | Make the active device ring (useful for finding it)            |
 | kdeconnect-select-active-device | Select the active device from =kdeconnect-devices=             |
 | kdeconnect-send-file            | Send the selected file to the active device                    |
+| kdeconnect-send-sms             | Send an SMS to the specified destination                       |
 
 * Troubleshooting
 If you're not seeing any response from your desired device, make sure there is an active connection.
