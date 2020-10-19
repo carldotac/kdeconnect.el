@@ -1,10 +1,10 @@
 ;;; kdeconnect.el --- An interface for KDE Connect
 
-;; Copyright (C) 2016 Carl Lieberman
+;; Copyright (C) 2016-2020 Carl Lieberman
 
 ;; Author: Carl Lieberman <dev@carl.ac>
 ;; Keywords: kdeconnect, android
-;; Version: 1.2.1
+;; Version: 1.2.2
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -92,7 +92,8 @@
    (mapconcat 'identity
               (list "kdeconnect-cli" "-d"
                     (shell-quote-argument kdeconnect-active-device)
-                    "--share" (shell-quote-argument path)) " ")))
+                    "--share" (shell-quote-argument
+                               (expand-file-name path))) " ")))
 
 ;;;###autoload
 (defun kdeconnect-select-active-device (name)
