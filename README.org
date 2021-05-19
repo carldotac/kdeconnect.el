@@ -29,17 +29,19 @@ If you do not set a default or wish to update your active device for the session
 
 * Usage
 After selecting an active device, the following functions are available.
-| Function                        | Description                                                    |
-|---------------------------------+----------------------------------------------------------------|
-| kdeconnect-get-active-device    | Display the active device                                      |
-| kdeconnect-list-devices         | Display all visible devices, even unavailable ones             |
-| kdeconnect-ping                 | Send a notification to the active device                       |
-| kdeconnect-ping-msg             | Send a notification with a custom message to the active device |
-| kdeconnect-refresh              | Scan the network and refresh any available connections         |
-| kdeconnect-ring                 | Make the active device ring (useful for finding it)            |
-| kdeconnect-select-active-device | Select the active device from =kdeconnect-devices=             |
-| kdeconnect-send-file            | Send the selected file to the active device                    |
-| kdeconnect-send-sms             | Send an SMS to the specified destination                       |
+| Function                              | Description                                                    |
+|---------------------------------------+----------------------------------------------------------------|
+| kdeconnect-get-active-device          | Display the active device                                      |
+| kdeconnect-list-devices               | Display all visible devices, even unavailable ones             |
+| kdeconnect-ping                       | Send a notification to the active device                       |
+| kdeconnect-ping-msg                   | Send a notification with a custom message to the active device |
+| kdeconnect-refresh                    | Scan the network and refresh any available connections         |
+| kdeconnect-ring                       | Make the active device ring (useful for finding it)            |
+| kdeconnect-select-active-device       | Select the active device from =kdeconnect-devices=             |
+| kdeconnect-send-file                  | Send the selected file to the active device                    |
+| kdeconnect-send-text                  | Send text to the active device                                 |
+| kdeconnect-send-text-region-or-prompt | Interactively send text from active region, or prompt          |
+| kdeconnect-send-sms                   | Send an SMS to the specified destination                       |
 
 * Troubleshooting
 If you're not seeing any response from your desired device, make sure there is an active connection.

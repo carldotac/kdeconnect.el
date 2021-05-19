@@ -96,6 +96,25 @@
                                (expand-file-name path))) " ")))
 
 ;;;###autoload
+(defun kdeconnect-send-text (text)
+  "Send TEXT to the active device."
+  (interactive "MEnter a text to share: ")
+  (shell-command
+   (mapconcat 'identity
+              (list "kdeconnect-cli" "-d"
+                    (shell-quote-argument kdeconnect-active-device)
+                    "--share-text" (shell-quote-argument text)) " ")))
+
+;;;###autoload
+(defun kdeconnect-send-text-region-or-prompt ()
+  "Send text to the active device interactively.
+If the REGION is active send that text, otherwise prompt for what to send"
+  (interactive )
+  (if (use-region-p)
+      (kdeconnect-send-text (buffer-substring (region-beginning) (region-end)))
+    (call-interactively 'kdeconnect-send-text)))
+
+;;;###autoload
 (defun kdeconnect-select-active-device (name)
   "Set the active device to NAME."
   (interactive
