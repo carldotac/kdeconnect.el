@@ -40,7 +40,7 @@ After selecting an active device, the following functions are available.
 | kdeconnect-select-active-device       | Select the active device from =kdeconnect-devices=             |
 | kdeconnect-send-file                  | Send the selected file to the active device                    |
 | kdeconnect-send-text                  | Send text to the active device                                 |
-| kdeconnect-send-text-region-or-prompt | Interactively send text from region if relevant, or prompt     |
+| kdeconnect-send-text-region-or-prompt | Interactively send text from active region, or prompt          |
 | kdeconnect-send-sms                   | Send an SMS to the specified destination                       |
 
 * Troubleshooting
