@@ -33,7 +33,7 @@
 (require 'map)
 
 (defvar kdeconnect-active-device nil
-  "The ID of the active device.")
+  "The (NAME . ID) of the active device.")
 
 (defvar kdeconnect-devices nil
   "The IDs of your available devices.
@@ -72,7 +72,11 @@ If the a device ID is already present, do not add it."
 (defun kdeconnect-get-active-device ()
   "Display the ID of the active device."
   (interactive)
-  (message kdeconnect-active-device))
+  (if kdeconnect-active-device
+      (message "Active device: %s (ID: %s)"
+               (car kdeconnect-active-device)
+               (cdr kdeconnect-active-device))
+    (message "No active device. Use M-x kdeconnect-select-active-device")))
 
 ;;;###autoload
 (defun kdeconnect-list-devices ()
@@ -87,7 +91,7 @@ If the a device ID is already present, do not add it."
   (shell-command
    (mapconcat 'identity
               (list "kdeconnect-cli" "-d"
-                    (shell-quote-argument kdeconnect-active-device)
+                    (shell-quote-argument (cdr kdeconnect-active-device))
                     "--ping") " ")))
 
 ;;;###autoload
@@ -97,7 +101,7 @@ If the a device ID is already present, do not add it."
   (shell-command
    (mapconcat 'identity
               (list "kdeconnect-cli" "-d"
-                    (shell-quote-argument kdeconnect-active-device)
+                    (shell-quote-argument (cdr kdeconnect-active-device))
                     "--ping-msg" (shell-quote-argument message)) " ")))
 
 ;;;###autoload
@@ -113,7 +117,7 @@ If the a device ID is already present, do not add it."
   (shell-command
    (mapconcat 'identity
               (list "kdeconnect-cli" "-d"
-                    (shell-quote-argument kdeconnect-active-device)
+                    (shell-quote-argument (cdr kdeconnect-active-device))
                     "--ring") " ")))
 
 ;;;###autoload
@@ -123,7 +127,7 @@ If the a device ID is already present, do not add it."
   (shell-command
    (mapconcat 'identity
               (list "kdeconnect-cli" "-d"
-                    (shell-quote-argument kdeconnect-active-device)
+                    (shell-quote-argument (cdr kdeconnect-active-device))
                     "--share" (shell-quote-argument
                                (expand-file-name path))) " ")))
 
@@ -134,7 +138,7 @@ If the a device ID is already present, do not add it."
   (shell-command
    (mapconcat 'identity
               (list "kdeconnect-cli" "-d"
-                    (shell-quote-argument kdeconnect-active-device)
+                    (shell-quote-argument (cdr kdeconnect-active-device))
                     "--share-text" (shell-quote-argument text)) " ")))
 
 ;;;###autoload
@@ -155,7 +159,7 @@ If the REGION is active send that text, otherwise prompt for what to send"
           (map-keys kdeconnect-devices)
           nil t "")))
   (setq kdeconnect-active-device
-        (alist-get name kdeconnect-devices nil nil #'string=)))
+        (assoc name kdeconnect-devices #'string=)))
 
 ;;;###autoload
 (defun kdeconnect-send-sms (message destination)
@@ -163,7 +167,7 @@ If the REGION is active send that text, otherwise prompt for what to send"
   (shell-command
    (mapconcat 'identity
               (list "kdeconnect-cli" "-d"
-                    (shell-quote-argument kdeconnect-active-device)
+                    (shell-quote-argument (cdr kdeconnect-active-device))
                     "--destination" (number-to-string destination)
                     "--send-sms" (shell-quote-argument message)) " ")))
 
