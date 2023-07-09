@@ -35,12 +35,27 @@
 (require 'map)
 (require 'seq)
 
-(defvar kdeconnect-active-device nil
-  "The (NAME . ID) of the active device.")
+(defgroup kdeconnect nil
+  "KDEConnect integration"
+  :tag "KDEConnect"
+  :group 'convenience
+  :link '(url-link "https://github.com/carldotac/kdeconnect.el"))
 
-(defvar kdeconnect-devices nil
+(defcustom kdeconnect-active-device nil
+  "The (NAME . ID) of the active device.
+This variable can be setted by `kdeconnect-select-active-device',
+`setq' or the customization buffer."
+  :type '(cons string string)
+  :group 'kdeconnect)
+
+(defcustom kdeconnect-devices nil
   "The IDs of your available devices.
-An alist of (name . ID) of available devices.")
+An alist of (name . ID) of available devices.  This variable can be
+updated with new devices with `kdeconnect-update-kdeconnect-devices'
+for the current session only.
+It can be modified with `setq' or customized."
+  :type '(alist :key-type string :value-type string)
+  :group 'kdeconnect)
 
 (defun kdeconnect--new-devices (device-list)
   "Return new devices IDs not in the `kdeconnect-devices' variable.
@@ -61,8 +76,11 @@ The string must be composed of lines with \"ID NAME\" format."
 
 ;;;###autoload
 (defun kdeconnect-update-kdeconnect-devices ()
-  "Update `kdeconnec-devices' with the current list.
-If the a device ID is already present, do not add it."
+  "Update `kdeconnect-devices' with the current list.
+If the a device ID is already present, do not add it.
+The update will affect to the curent Emacs session only.  The
+`kdeconnect-devices' variable must be saved by customizing it or
+adding a `setq' sentence on your init file."
   (interactive)
   (let ((new-devices (kdeconnect--new-devices
                       (kdeconnect--parse-device-list
