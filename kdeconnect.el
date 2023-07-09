@@ -63,7 +63,10 @@ Signal error if there is no active device and the user has not selected
 one."
   (cond
    (kdeconnect-active-device
-      kdeconnect-active-device)
+    kdeconnect-active-device)
+   ((= (length kdeconnect-devices) 0)
+    (message "No devices! Use M-x kdeconnect-update-kdeconnect-devices.")
+    nil)
    ((y-or-n-p (format "No active device selected. Use %s?"
                       (caar kdeconnect-devices)))
     (setq kdeconnect-active-device (car kdeconnect-devices))
