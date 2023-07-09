@@ -30,11 +30,43 @@
 
 ;;; Code:
 
+(require 'map)
+
 (defvar kdeconnect-active-device nil
   "The ID of the active device.")
 
 (defvar kdeconnect-devices nil
-  "The IDs of your available devices.")
+  "The IDs of your available devices.
+An alist of (name . ID) of available devices.")
+
+(defun kdeconnect--new-devices (device-list)
+  "Return new devices IDs not in the `kdeconnect-devices' variable.
+DEVICE-LIST is an alist with (NAME . ID) elements."
+  (let ((saved-device-ids (map-values kdeconnect-devices)))
+    (seq-filter (lambda (device)
+                  (not (member (cdr device) saved-device-ids)))
+                device-list)))
+
+(defun kdeconnect--parse-device-list (output-string)
+  "Parse the string into an alist of devices.
+Return an alist with (NAME . ID) for each line in the OUTPUT-STRING.
+The string must be composed of lines with \"ID NAME\" format."
+  (mapcar (lambda (line)
+            (string-match "\\([[:alnum:]]+\\) \\(.*\\)" line)
+            (cons (match-string 2 line) (match-string 1 line)))
+          (split-string output-string "\n" t)))
+
+(defun kdeconnect-update-kdeconnect-devices ()
+  "Update `kdeconnec-devices' with the current list.
+If the a device ID is already present, do not add it."
+  (interactive)
+  (let ((new-devices (kdeconnect--new-devices
+                      (kdeconnect--parse-device-list
+                       (shell-command-to-string "kdeconnect-cli -l --id-name-only")))))
+    (when (y-or-n-p (format "Add new devices: %s?" new-devices))
+      (setq kdeconnect-devices
+            (append new-devices kdeconnect-devices)))))
+              
 
 ;;;###autoload
 (defun kdeconnect-get-active-device ()
@@ -120,9 +152,10 @@ If the REGION is active send that text, otherwise prompt for what to send"
   (interactive
    (list (completing-read
           "Select a device: "
-          (split-string kdeconnect-devices "," t)
+          (map-keys kdeconnect-devices)
           nil t "")))
-  (setq kdeconnect-active-device name))
+  (setq kdeconnect-active-device
+        (alist-get name kdeconnect-devices nil nil #'string=)))
 
 ;;;###autoload
 (defun kdeconnect-send-sms (message destination)
