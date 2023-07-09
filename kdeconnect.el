@@ -1,10 +1,12 @@
-;;; kdeconnect.el --- An interface for KDE Connect
+;;; kdeconnect.el --- An interface for KDE Connect  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2016-2020 Carl Lieberman
 
 ;; Author: Carl Lieberman <dev@carl.ac>
-;; Keywords: kdeconnect, android
+;; Keywords: convenience
 ;; Version: 1.2.2
+;; URL: https://github.com/carldotac/kdeconnect.el
+;; Package-Requires: ((emacs "25.1"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -31,6 +33,7 @@
 ;;; Code:
 
 (require 'map)
+(require 'seq)
 
 (defvar kdeconnect-active-device nil
   "The (NAME . ID) of the active device.")
@@ -56,6 +59,7 @@ The string must be composed of lines with \"ID NAME\" format."
             (cons (match-string 2 line) (match-string 1 line)))
           (split-string output-string "\n" t)))
 
+;;;###autoload
 (defun kdeconnect-update-kdeconnect-devices ()
   "Update `kdeconnec-devices' with the current list.
 If the a device ID is already present, do not add it."
@@ -163,6 +167,9 @@ If the REGION is active send that text, otherwise prompt for what to send"
 
 ;;;###autoload
 (defun kdeconnect-send-sms (message destination)
+  "Send an SMS message through your cellphone.
+MESSAGE is a string with the message to send.  DESTINATION is a
+number to send (it must be a number value, not string)."
   (interactive "MEnter message: \nnEnter destination: ")
   (shell-command
    (mapconcat 'identity
