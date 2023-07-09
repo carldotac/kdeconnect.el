@@ -57,6 +57,21 @@ It can be modified with `setq' or customized."
   :type '(alist :key-type string :value-type string)
   :group 'kdeconnect)
 
+(defun kdeconnect--ensure-active-device ()
+  "Make sure there is an active device, ask user otherwise.
+Signal error if there is no active device and the user has not selected
+one."
+  (cond
+   (kdeconnect-active-device
+      kdeconnect-active-device)
+   ((y-or-n-p (format "No active device selected. Use %s?"
+                      (caar kdeconnect-devices)))
+    (setq kdeconnect-active-device (car kdeconnect-devices))
+    kdeconnect-active-device)
+   (t
+    (message "No active device. Use M-x kdeconnect-select-active-device.")
+    nil)))
+
 (defun kdeconnect--new-devices (device-list)
   "Return new devices IDs not in the `kdeconnect-devices' variable.
 DEVICE-LIST is an alist with (NAME . ID) elements."
@@ -110,21 +125,23 @@ adding a `setq' sentence on your init file."
 (defun kdeconnect-ping ()
   "Ping the active device."
   (interactive)
-  (shell-command
-   (mapconcat 'identity
-              (list "kdeconnect-cli" "-d"
-                    (shell-quote-argument (cdr kdeconnect-active-device))
-                    "--ping") " ")))
+  (when (kdeconnect--ensure-active-device)
+    (shell-command
+     (mapconcat 'identity
+                (list "kdeconnect-cli" "-d"
+                      (shell-quote-argument (cdr kdeconnect-active-device))
+                      "--ping") " "))))
 
 ;;;###autoload
 (defun kdeconnect-ping-msg (message)
   "Ping the active device with MESSAGE."
   (interactive "MEnter message: ")
-  (shell-command
-   (mapconcat 'identity
-              (list "kdeconnect-cli" "-d"
-                    (shell-quote-argument (cdr kdeconnect-active-device))
-                    "--ping-msg" (shell-quote-argument message)) " ")))
+  (when (kdeconnect--ensure-active-device)
+    (shell-command
+     (mapconcat 'identity
+                (list "kdeconnect-cli" "-d"
+                      (shell-quote-argument (cdr kdeconnect-active-device))
+                      "--ping-msg" (shell-quote-argument message)) " "))))
 
 ;;;###autoload
 (defun kdeconnect-refresh ()
@@ -136,41 +153,45 @@ adding a `setq' sentence on your init file."
 (defun kdeconnect-ring ()
   "Ring the active device."
   (interactive)
-  (shell-command
-   (mapconcat 'identity
-              (list "kdeconnect-cli" "-d"
-                    (shell-quote-argument (cdr kdeconnect-active-device))
-                    "--ring") " ")))
+  (when (kdeconnect--ensure-active-device)
+    (shell-command
+     (mapconcat 'identity
+                (list "kdeconnect-cli" "-d"
+                      (shell-quote-argument (cdr kdeconnect-active-device))
+                      "--ring") " "))))
 
 ;;;###autoload
 (defun kdeconnect-send-file (path)
   "Send the file at PATH to the active device."
   (interactive "fSelect file: ")
-  (shell-command
-   (mapconcat 'identity
-              (list "kdeconnect-cli" "-d"
-                    (shell-quote-argument (cdr kdeconnect-active-device))
-                    "--share" (shell-quote-argument
-                               (expand-file-name path))) " ")))
+  (when (kdeconnect--ensure-active-device)
+    (shell-command
+     (mapconcat 'identity
+                (list "kdeconnect-cli" "-d"
+                      (shell-quote-argument (cdr kdeconnect-active-device))
+                      "--share" (shell-quote-argument
+                                (expand-file-name path))) " "))))
 
 ;;;###autoload
 (defun kdeconnect-send-text (text)
   "Send TEXT to the active device."
   (interactive "MEnter a text to share: ")
-  (shell-command
-   (mapconcat 'identity
-              (list "kdeconnect-cli" "-d"
-                    (shell-quote-argument (cdr kdeconnect-active-device))
-                    "--share-text" (shell-quote-argument text)) " ")))
+  (when (kdeconnect--ensure-active-device)
+    (shell-command
+     (mapconcat 'identity
+                (list "kdeconnect-cli" "-d"
+                      (shell-quote-argument (cdr kdeconnect-active-device))
+                      "--share-text" (shell-quote-argument text)) " "))))
 
 ;;;###autoload
 (defun kdeconnect-send-text-region-or-prompt ()
   "Send text to the active device interactively.
 If the REGION is active send that text, otherwise prompt for what to send"
   (interactive )
-  (if (use-region-p)
-      (kdeconnect-send-text (buffer-substring (region-beginning) (region-end)))
-    (call-interactively 'kdeconnect-send-text)))
+  (when (kdeconnect--ensure-active-device)
+    (if (use-region-p)
+        (kdeconnect-send-text (buffer-substring (region-beginning) (region-end)))
+      (call-interactively 'kdeconnect-send-text))))
 
 ;;;###autoload
 (defun kdeconnect-select-active-device (name)
@@ -189,12 +210,13 @@ If the REGION is active send that text, otherwise prompt for what to send"
 MESSAGE is a string with the message to send.  DESTINATION is a
 number to send (it must be a number value, not string)."
   (interactive "MEnter message: \nnEnter destination: ")
-  (shell-command
-   (mapconcat 'identity
-              (list "kdeconnect-cli" "-d"
-                    (shell-quote-argument (cdr kdeconnect-active-device))
-                    "--destination" (number-to-string destination)
-                    "--send-sms" (shell-quote-argument message)) " ")))
+  (when (kdeconnect--ensure-active-device)
+    (shell-command
+     (mapconcat 'identity
+                (list "kdeconnect-cli" "-d"
+                      (shell-quote-argument (cdr kdeconnect-active-device))
+                      "--destination" (number-to-string destination)
+                      "--send-sms" (shell-quote-argument message)) " "))))
 
 (provide 'kdeconnect)
 ;;; kdeconnect.el ends here

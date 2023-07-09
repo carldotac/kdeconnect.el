@@ -23,7 +23,7 @@ Before calling any functions that interact with a specific device, you /must/ se
 There are two ways to do this.
 You can set a default device by adding
 #+BEGIN_SRC emacs-lisp
-(setq kdeconnect-active-device "<device ID>")
+(setq kdeconnect-active-device '("<name>" . "<device ID>"))
 #+END_SRC
 to your =init.el= file.
 When you load Emacs and call a function like kdeconnect-ping, that device will be the target.
