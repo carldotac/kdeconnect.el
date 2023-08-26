@@ -196,14 +196,25 @@ If the REGION is active send that text, otherwise prompt for what to send"
         (kdeconnect-send-text (buffer-substring (region-beginning) (region-end)))
       (call-interactively 'kdeconnect-send-text))))
 
+(defun kdeconnect--update-devices-maybe ()
+  "Update `kdeconnect-devices' if no devices is present in the list."
+  (when (seq-empty-p kdeconnect-devices)
+    (message "No devices in kdeconnect-devices list. Updating devices...")
+    (kdeconnect-update-kdeconnect-devices)))
+
 ;;;###autoload
 (defun kdeconnect-select-active-device (name)
-  "Set the active device to NAME."
+  "Set the active device to NAME.
+If no devices are in `kdeconnect-devices' list, call
+`kdeconnect-update-kdeconnect-devices' to update the list of possible
+new devices to select."
   (interactive
-   (list (completing-read
-          "Select a device: "
-          (map-keys kdeconnect-devices)
-          nil t "")))
+   (list (progn
+           (kdeconnect--update-devices-maybe)
+           (completing-read
+            "Select a device: "
+            (map-keys kdeconnect-devices)
+            nil t ""))))
   (setq kdeconnect-active-device
         (assoc name kdeconnect-devices #'string=)))
 
