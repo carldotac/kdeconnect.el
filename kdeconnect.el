@@ -202,7 +202,10 @@ If the REGION is active send that text, otherwise prompt for what to send"
   (interactive
    (list (completing-read
           "Select a device: "
-          (map-keys kdeconnect-devices)
+          (map-keys (progn (unless kdeconnect-devices
+                             (message "No devices found... updating paired devices...")
+                             (kdeconnect-update-kdeconnect-devices))
+                           kdeconnect-devices))
           nil t "")))
   (setq kdeconnect-active-device
         (assoc name kdeconnect-devices #'string=)))
