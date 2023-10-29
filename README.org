@@ -2,6 +2,8 @@
 kdeconnect.el is a package that provides helper functions for the excellent [[https://community.kde.org/KDEConnect][KDE Connect]] package available for computers and Android devices.
 Now you can send files across devices or make your phone ring when you can't find the darn thing, all without ever leaving Emacs!
 
+*New in 1.3.0:* configuring devices has changed. See the Setup section for how to list (and now label!) your devices.
+
 * Setup
 Install KDE Connect on your Android device(s) using [[https://f-droid.org/repository/browse/?fdfilter=kde+connect&fdid=org.kde.kdeconnect_tp][F-Droid]] or the [[https://play.google.com/store/apps/details?id=org.kde.kdeconnect_tp][Google Play Store]].
 Also install it on any computers you want.

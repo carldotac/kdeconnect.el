@@ -4,7 +4,7 @@
 
 ;; Author: Carl Lieberman <dev@carl.ac>
 ;; Keywords: convenience
-;; Version: 1.2.2
+;; Version: 1.3.0
 ;; URL: https://github.com/carldotac/kdeconnect.el
 ;; Package-Requires: ((emacs "25.1"))
 
