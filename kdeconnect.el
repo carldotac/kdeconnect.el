@@ -1,6 +1,6 @@
 ;;; kdeconnect.el --- An interface for KDE Connect  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016-2020 Carl Lieberman
+;; Copyright (C) 2016-2023 Carl Lieberman
 
 ;; Author: Carl Lieberman <dev@carl.ac>
 ;; Keywords: convenience
