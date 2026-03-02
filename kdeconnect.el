@@ -100,9 +100,10 @@ The update will affect to the curent Emacs session only.  The
 `kdeconnect-devices' variable must be saved by customizing it or
 adding a `setq' sentence on your init file."
   (interactive)
-  (let ((new-devices (kdeconnect--new-devices
-                      (kdeconnect--parse-device-list
-                       (shell-command-to-string "kdeconnect-cli -l --id-name-only")))))
+  (let* ((default-directory (expand-file-name "~/"))
+         (new-devices (kdeconnect--new-devices
+                       (kdeconnect--parse-device-list
+                        (shell-command-to-string "kdeconnect-cli -l --id-name-only")))))
     (when (y-or-n-p (format "Add new devices: %s?" new-devices))
       (setq kdeconnect-devices
             (append new-devices kdeconnect-devices)))))
@@ -122,69 +123,56 @@ adding a `setq' sentence on your init file."
 (defun kdeconnect-list-devices ()
   "Display all visible devices, even unavailable ones."
   (interactive)
-  (shell-command "kdeconnect-cli -l"))
+  (let ((default-directory (expand-file-name "~/")))
+    (shell-command "kdeconnect-cli -l")))
+
+(defun kdeconnect--cmd (&rest args)
+  "Run kdeconnect-cli with ARGS."
+  (when (kdeconnect--ensure-active-device)
+    (let ((default-directory (expand-file-name "~/")))
+      (shell-command
+       (string-join `("kdeconnect-cli"
+                      "-d"
+                      ,(shell-quote-argument (cdr kdeconnect-active-device))
+                      ,@(mapcar #'shell-quote-argument args))
+                    " ")))))
 
 ;;;###autoload
 (defun kdeconnect-ping ()
   "Ping the active device."
   (interactive)
-  (when (kdeconnect--ensure-active-device)
-    (shell-command
-     (mapconcat 'identity
-                (list "kdeconnect-cli" "-d"
-                      (shell-quote-argument (cdr kdeconnect-active-device))
-                      "--ping") " "))))
+  (kdeconnect--cmd "--ping"))
 
 ;;;###autoload
 (defun kdeconnect-ping-msg (message)
   "Ping the active device with MESSAGE."
   (interactive "MEnter message: ")
-  (when (kdeconnect--ensure-active-device)
-    (shell-command
-     (mapconcat 'identity
-                (list "kdeconnect-cli" "-d"
-                      (shell-quote-argument (cdr kdeconnect-active-device))
-                      "--ping-msg" (shell-quote-argument message)) " "))))
+  (kdeconnect--cmd "--ping-msg" message))
 
 ;;;###autoload
 (defun kdeconnect-refresh ()
   "Refresh connections."
   (interactive)
-  (shell-command "kdeconnect-cli --refresh"))
+  (let ((default-directory (expand-file-name "~/")))
+    (shell-command "kdeconnect-cli --refresh")))
 
 ;;;###autoload
 (defun kdeconnect-ring ()
   "Ring the active device."
   (interactive)
-  (when (kdeconnect--ensure-active-device)
-    (shell-command
-     (mapconcat 'identity
-                (list "kdeconnect-cli" "-d"
-                      (shell-quote-argument (cdr kdeconnect-active-device))
-                      "--ring") " "))))
+  (kdeconnect--cmd "--ring"))
 
 ;;;###autoload
 (defun kdeconnect-send-file (path)
   "Send the file at PATH to the active device."
   (interactive "fSelect file: ")
-  (when (kdeconnect--ensure-active-device)
-    (shell-command
-     (mapconcat 'identity
-                (list "kdeconnect-cli" "-d"
-                      (shell-quote-argument (cdr kdeconnect-active-device))
-                      "--share" (shell-quote-argument
-                                (expand-file-name path))) " "))))
+  (kdeconnect--cmd "--share" (expand-file-name path)))
 
 ;;;###autoload
 (defun kdeconnect-send-text (text)
   "Send TEXT to the active device."
   (interactive "MEnter a text to share: ")
-  (when (kdeconnect--ensure-active-device)
-    (shell-command
-     (mapconcat 'identity
-                (list "kdeconnect-cli" "-d"
-                      (shell-quote-argument (cdr kdeconnect-active-device))
-                      "--share-text" (shell-quote-argument text)) " "))))
+  (kdeconnect--cmd "--share-text" text))
 
 ;;;###autoload
 (defun kdeconnect-send-text-region-or-prompt ()
@@ -224,13 +212,8 @@ new devices to select."
 MESSAGE is a string with the message to send.  DESTINATION is a
 number to send (it must be a number value, not string)."
   (interactive "MEnter message: \nnEnter destination: ")
-  (when (kdeconnect--ensure-active-device)
-    (shell-command
-     (mapconcat 'identity
-                (list "kdeconnect-cli" "-d"
-                      (shell-quote-argument (cdr kdeconnect-active-device))
-                      "--destination" (number-to-string destination)
-                      "--send-sms" (shell-quote-argument message)) " "))))
+  (kdeconnect--cmd "--destination" (number-to-string destination)
+                   "--send-sms" message))
 
 (provide 'kdeconnect)
 ;;; kdeconnect.el ends here
